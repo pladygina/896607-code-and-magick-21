@@ -1,6 +1,6 @@
 'use strict';
 
-const WISARD_NAMES = [
+const WIZARD_NAMES = [
   `Иван`,
   `Хуан Себастьян`,
   `Мария`,
@@ -50,17 +50,20 @@ const getRandomFromArray = (array) => {
 };
 
 const createWizard = () => {
-  let wizard = {};
-  wizard.name = getRandomFromArray(WISARD_NAMES) + ` ` + getRandomFromArray(WIZARD_LASTNAMES);
-  wizard.coatColor = getRandomFromArray(WIZARD_COATS);
-  wizard.eyesColor = getRandomFromArray(WIZARD_EYES);
-  return wizard;
+  return {
+    name: getRandomFromArray(WIZARD_NAMES) + ` ` + getRandomFromArray(WIZARD_LASTNAMES),
+    coatColor: getRandomFromArray(WIZARD_COATS),
+    eyesColor: getRandomFromArray(WIZARD_EYES)
+  };
 };
 
-const wizards = [];
-for (let i = 0; i < WIZARDS_QUANTITY; i++) {
-  wizards[i] = createWizard();
-}
+const createWizards = (quantity) => {
+  let similars = [];
+  for (let i = 1; i <= quantity; i++) {
+    similars.push(createWizard());
+  }
+  return similars;
+};
 
 const wizardSetup = document.querySelector(`.setup`);
 const setupOpen = document.querySelector(`.setup-open`);
@@ -118,6 +121,7 @@ const renderWizard = (wizard) => {
 };
 
 const fragment = document.createDocumentFragment();
+let wizards = createWizards(WIZARDS_QUANTITY);
 for (let i = 0; i < wizards.length; i++) {
   fragment.appendChild(renderWizard(wizards[i]));
 }
