@@ -1,20 +1,17 @@
 'use strict';
+const userNameMinLength = window.nodes.userNameInput.minLength;
+const userNameMaxLength = window.nodes.userNameInput.maxLength;
 
-const wizardSetup = document.querySelector(`.setup`);
-const userNameInput = wizardSetup.querySelector(`.setup-user-name`);
-const userNameMinLength = userNameInput.minLength;
-const userNameMaxLength = userNameInput.maxLength;
-
-userNameInput.addEventListener(`input`, function () {
-  let userNameLength = userNameInput.value.length;
+window.nodes.userNameInput.addEventListener(`input`, function () {
+  let userNameLength = window.nodes.userNameInput.value.length;
   if (userNameLength < userNameMinLength) {
-    userNameInput.setCustomValidity(`Еще ` + (userNameMinLength - userNameLength) + ` симв.`);
+    window.nodes.userNameInput.setCustomValidity(`Еще ` + (userNameMinLength - userNameLength) + ` симв.`);
   } else if (userNameLength > userNameMaxLength) {
-    userNameInput.setCustomValidity(`Удалите лишние  ` + (userNameLength - userNameMaxLength) + ` симв.`);
+    window.nodes.userNameInput.setCustomValidity(`Удалите лишние  ` + (userNameLength - userNameMaxLength) + ` симв.`);
   } else {
-    userNameInput.setCustomValidity(``);
+    window.nodes.userNameInput.setCustomValidity(``);
   }
-  userNameInput.reportValidity();
+  window.nodes.userNameInput.reportValidity();
 });
 
 const setupWizard = document.querySelector(`.setup-wizard`);
