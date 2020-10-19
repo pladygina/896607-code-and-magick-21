@@ -2,22 +2,20 @@
 
 (function () {
 
-  const wizardSetup = document.querySelector(`.setup`);
   const setupOpen = document.querySelector(`.setup-open`);
-  const setupClose = wizardSetup.querySelector(`.setup-close`);
-  const userNameInput = wizardSetup.querySelector(`.setup-user-name`);
-  const dialogHandle = wizardSetup.querySelector(`.upload`);
+  const setupClose = window.nodes.wizardSetup.querySelector(`.setup-close`);
+  const dialogHandle = window.nodes.wizardSetup.querySelector(`.upload`);
 
   const onSetupEscPress = (evt) => {
-    window.util.isEscEvent(evt, closeSetup);
+    window.utils.isEscEvent(evt, closeSetup);
   };
 
   const onOpenSetupEnterPress = (evt) => {
-    window.util.isEnterEvent(evt, openSetup);
+    window.utils.isEnterEvent(evt, openSetup);
   };
 
   const onCloseSetupEnterPress = (evt) => {
-    window.util.isEnterEvent(evt, closeSetup);
+    window.utils.isEnterEvent(evt, closeSetup);
   };
 
   const onOpenSetupClick = () => {
@@ -47,8 +45,8 @@
         y: startCoords.y - moveEvt.clientY
       };
 
-      wizardSetup.style.top = (wizardSetup.offsetTop - shift.y) + `px`;
-      wizardSetup.style.left = (wizardSetup.offsetLeft - shift.x) + `px`;
+      window.nodes.wizardSetup.style.top = (window.nodes.wizardSetup.offsetTop - shift.y) + `px`;
+      window.nodes.wizardSetup.style.left = (window.nodes.wizardSetup.offsetLeft - shift.x) + `px`;
 
       startCoords = {
         x: moveEvt.clientX,
@@ -76,34 +74,43 @@
   };
 
   const openSetup = () => {
-    wizardSetup.classList.remove(`hidden`);
+    window.nodes.wizardSetup.classList.remove(`hidden`);
     document.addEventListener(`keydown`, onSetupEscPress);
     setupClose.addEventListener(`keydown`, onCloseSetupEnterPress);
     setupClose.addEventListener(`click`, onCloseSetupClick);
     setupOpen.removeEventListener(`keydown`, onOpenSetupEnterPress);
     setupOpen.removeEventListener(`click`, onOpenSetupClick);
-    userNameInput.addEventListener(`focus`, function () {
+    window.nodes.userNameInput.addEventListener(`focus`, function () {
       document.removeEventListener(`keydown`, onSetupEscPress);
     });
-    userNameInput.addEventListener(`blur`, function () {
+    window.nodes.userNameInput.addEventListener(`blur`, function () {
       document.addEventListener(`keydown`, onSetupEscPress);
     });
     dialogHandle.addEventListener(`mousedown`, onMouseDown);
+    window.backend.load(window.similars.successHandler, window.utils.errorHandler);
   };
 
   const closeSetup = () => {
-    wizardSetup.classList.add(`hidden`);
+    window.nodes.wizardSetup.classList.add(`hidden`);
     document.removeEventListener(`keydown`, onSetupEscPress);
     setupClose.removeEventListener(`keydown`, onCloseSetupEnterPress);
     setupClose.removeEventListener(`click`, onCloseSetupClick);
     setupOpen.addEventListener(`keydown`, onOpenSetupEnterPress);
     setupOpen.addEventListener(`click`, onOpenSetupClick);
     dialogHandle.removeEventListener(`mousedown`, onMouseDown);
-    wizardSetup.style.top = ``;
-    wizardSetup.style.left = ``;
+    window.nodes.wizardSetup.style.top = ``;
+    window.nodes.wizardSetup.style.left = ``;
   };
 
   setupOpen.addEventListener(`click`, onOpenSetupClick);
   setupOpen.addEventListener(`keydown`, onOpenSetupEnterPress);
+
+  const setupForm = document.querySelector(`.setup-wizard-form`);
+  const submitHandler = (evt) => {
+    window.backend.save(new FormData(setupForm), closeSetup, window.utils.errorHandler);
+    evt.preventDefault();
+  };
+
+  setupForm.addEventListener(`submit`, submitHandler);
 
 })();

@@ -18,18 +18,18 @@
   };
 
   window.colorize = {
-    getRandomColor: function (item) {
-      return window.randomize.fromArray(WIZADR_COLORS[item]);
+    getRandomColor: (item) => {
+      return window.utils.getRandomFromArray(WIZADR_COLORS[item]);
     },
-    repaintItem: function (item, element, input) {
+    repaintItem: (item, element, input) => {
       element.addEventListener(`click`, function () {
         currentColorsNumbers[item] = shiftNumberColors(WIZADR_COLORS[item], currentColorsNumbers[item]);
         input.value = WIZADR_COLORS[item][currentColorsNumbers[item]];
-        if (element.tagName.toLowerCase() === `div`) {
+        if (element.classList.contains(`setup-fireball-wrap`)) {
           element.style.backgroundColor = input.value;
-        } else {
-          element.style.fill = input.value;
+          return;
         }
+        element.style.fill = input.value;
       });
     }
   };
