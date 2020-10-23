@@ -2,6 +2,7 @@
 
 (function () {
   let number = 100;
+  const DEBOUNCE_INTERVAL = 500; // ms
 
   window.utils = {
     isEscEvent: (evt, action) => {
@@ -30,6 +31,16 @@
       node.textContent = errorMessage;
       document.body.insertAdjacentElement(`afterbegin`, node);
       number++;
+    },
+    debounce: (cb) => {
+      let lastTimeout = null;
+
+      return function () {
+        if (lastTimeout) {
+          window.clearTimeout(lastTimeout);
+        }
+        lastTimeout = window.setTimeout(cb, DEBOUNCE_INTERVAL);
+      };
     }
   };
 })();
